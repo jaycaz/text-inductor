@@ -1,0 +1,8 @@
+start S
+
+4: S -> A
+S -> B
+A -> aA
+A -> a
+B -> bB
+B -> b
