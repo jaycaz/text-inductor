@@ -114,7 +114,7 @@ shape pix_5by5_44
 
 shape block_5by5
 {
-SQUARE [size 0.7]
+SQUARE [size 0.9]
 }
 
 shape A_5by5

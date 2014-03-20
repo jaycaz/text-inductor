@@ -1,0 +1,10 @@
+# Harry Potter spell grammar
+
+start S
+
+S -> BPL
+
+B -> a
+B -> aa
+P -> b
+L -> c

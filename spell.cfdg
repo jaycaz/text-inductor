@@ -1,0 +1,50 @@
+startshape S
+import i_pix.cfdg
+
+shape S
+rule 
+{
+	B [x 0.0]
+	P [x 1.2]
+	L [x 2.4]
+}
+
+shape B
+rule 
+{
+	Aterm [x 0.0]
+}
+rule 
+{
+	Aterm [x 0.0]
+	Aterm [x 1.2]
+}
+
+shape P
+rule 
+{
+	Bterm [x 0.0]
+}
+
+shape L
+rule 
+{
+	Cterm [x 0.0]
+}
+
+
+shape Aterm
+{
+	A_5by5 []
+}
+
+shape Bterm
+{
+	B_5by5 []
+}
+
+shape Cterm
+{
+	C_5by5 []
+}
+
