@@ -11,7 +11,7 @@ import string
 import random as rand
 from grammar import Rule, Grammar, grammar_from_file
 
-MAX_STEPS = 100
+MAX_STEPS = 200
 DEFAULT_NUM_WORDS = 10
 DEFAULT_SEED = None
 
@@ -112,30 +112,7 @@ if __name__ == "__main__":
 	gram = grammar_from_file(filename)
 	generate_word(gram, numwords, seed)
 		
-	# # Open input grammar file for parsing
-	# print "Opening {0}...".format(filename)
-	# try:
-		# infile = open(filename, 'r')
-	# except IOError:
-		# print "Error: {0} could not be found".format(filename)
-		# sys.exit(-1)
-		
-	# # Open output grammar file for writing
-	# try:
-		# outfilename = filename.replace(".txt", ".cfdg")
-		# outfile = open(outfilename, 'w')
-	# except IOError:
-		# print "Error: {0} could not be opened for writing".format(outfilename)
-		# sys.exit(-1)
-		
-	# #perform conversion
-	# try:
-		# convert(infile, outfile)
-		# print "Output CFDG grammar saved to {0}".format(outfilename)
-	# finally:
-		# infile.close()
-		# outfile.close()
-	
+
 
 
 	
