@@ -5,24 +5,15 @@
 # 2014                              #
 #####################################
 
-# Grammar Syntax Definitions:
-# <Grammar> := 
-# 	<Startline>
-# 	<Rule>+
-#	
-# <Startline> := start <StartSymbol>
-# <StartSymbol> is a symbol in the set of nonterminals
-# <Rule> := <Weight>? : <Nonterminal> -> <Nonterminal | Terminal>*
-#
-# The rule weight is optional.  If no weight is specified, a weight of 1 is used.
-
 import sys
 import re
 import string
 import random as rand
-from grammar import Rule, Grammar, parse_grammar_file
+from grammar import Rule, Grammar, grammar_from_file
 
 MAX_STEPS = 100
+DEFAULT_NUM_WORDS = 10
+DEFAULT_SEED = None
 
 def get_nonterms(string):
 	nonterms = []
@@ -73,7 +64,7 @@ def generate_word(grammar, n = 1, seed = None):
 		nonterms = get_nonterms(genstr)
 		numsteps = 0
 		while len(nonterms) != 0 and numsteps < MAX_STEPS:
-			print genstr
+			#print genstr
 			next_nonterm, next_pos = rand.choice(nonterms)
 			
 			# choose among the nonterminal's rules (weighted)
@@ -88,7 +79,8 @@ def generate_word(grammar, n = 1, seed = None):
 			nonterms = get_nonterms(genstr)
 			numsteps += 1
 	
-		print "Final string {0}: {1}".format(i, genstr)
+		#print "Final string {0}: {1}".format(i, genstr)
+		print genstr
 		
 		if numsteps == MAX_STEPS:
 			print "Error: generation exceeded maximum number of steps ({0})".format(MAX_STEPS)
@@ -97,33 +89,52 @@ def generate_word(grammar, n = 1, seed = None):
 
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
-			filename = raw_input("Enter a file name to convert: ")
+		filename = raw_input("Enter a file name to convert: ")
 	else:
 		filename = sys.argv[1]
 		
-	# Open input grammar file for parsing
-	print "Opening {0}...".format(filename)
-	try:
-		infile = open(filename, 'r')
-	except IOError:
-		print "Error: {0} could not be found".format(filename)
-		sys.exit(-1)
+	if len(sys.argv) < 3:
+		numwords = DEFAULT_NUM_WORDS
+	else:
+		try:
+			numwords = int(sys.argv[2])
+		except:
+			numwords = DEFAULT_NUM_WORDS
+	
+	if len(sys.argv) < 4:
+		seed = DEFAULT_SEED
+	else:
+		try:
+			seed = int(sys.argv[3])
+		except:
+			seed = DEFAULT_SEED
+			
+	gram = grammar_from_file(filename)
+	generate_word(gram, numwords, seed)
 		
-	# Open output grammar file for writing
-	try:
-		outfilename = filename.replace(".txt", ".cfdg")
-		outfile = open(outfilename, 'w')
-	except IOError:
-		print "Error: {0} could not be opened for writing".format(outfilename)
-		sys.exit(-1)
+	# # Open input grammar file for parsing
+	# print "Opening {0}...".format(filename)
+	# try:
+		# infile = open(filename, 'r')
+	# except IOError:
+		# print "Error: {0} could not be found".format(filename)
+		# sys.exit(-1)
 		
-	#perform conversion
-	try:
-		convert(infile, outfile)
-		print "Output CFDG grammar saved to {0}".format(outfilename)
-	finally:
-		infile.close()
-		outfile.close()
+	# # Open output grammar file for writing
+	# try:
+		# outfilename = filename.replace(".txt", ".cfdg")
+		# outfile = open(outfilename, 'w')
+	# except IOError:
+		# print "Error: {0} could not be opened for writing".format(outfilename)
+		# sys.exit(-1)
+		
+	# #perform conversion
+	# try:
+		# convert(infile, outfile)
+		# print "Output CFDG grammar saved to {0}".format(outfilename)
+	# finally:
+		# infile.close()
+		# outfile.close()
 	
 
 

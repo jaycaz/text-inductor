@@ -5,12 +5,27 @@
 # 2014                              #
 #####################################
 
+# Grammar Syntax Definitions:
+# <Grammar> := 
+# 	<Startline>
+# 	<Rule>+
+#	
+# <Startline> := start <StartSymbol>
+# <StartSymbol> is a symbol in the set of nonterminals
+# <Rule> := <Weight>? : <Nonterminal> -> <String>
+# <String> := <Nonterminal | Terminal>* | <Empty>
+# <Empty> := defined below
+#
+# The rule weight is optional.  If no weight is specified, a weight of 1 is used.
+# As shown above, a rule may have an empty string as the RHS, indicated by the empty symbol (defined below)
+
 import re
 
 CHAR_SPACE = 0.2
 DX = 1 + CHAR_SPACE
 COMMENT = "#"
 ARROW = "->"
+EMPTY = "~"
 SYMBOLNAME = "_5by5"
 LIBNAME = "i_pix.cfdg"
 TERM = "term"
@@ -31,6 +46,32 @@ class Grammar:
 		self.rules = rules
 		self.start = start
 		
+
+def grammar_from_file(filename):
+	# Open input grammar file for parsing
+	print "Opening {0}...".format(filename)
+	try:
+		infile = open(filename, 'r')
+	except IOError as err:
+		print "Error: {0} could not be found".format(filename)
+		raise err
+		
+	try:
+		grammar = parse_grammar_file(infile)
+	except Exception as err:
+		infile.close()
+		raise err
+	
+	infile.close()		
+	return grammar
+		
+	# # Open output grammar file for writing
+	# try:
+		# outfilename = filename.replace(".txt", ".cfdg")
+		# outfile = open(outfilename, 'w')
+	# except IOError:
+		# print "Error: {0} could not be opened for writing".format(outfilename)
+		# sys.exit(-1)
 
 def term(symbol):
 	return "{0}{1}".format(symbol.upper(), TERM)
@@ -56,20 +97,17 @@ def getlhs(rule):
 	
 def getrhs(rule):
 	ruleparts = splitrule(rule)
-	return ruleparts[2]
+	rhs = ruleparts[2]
+	if rhs == EMPTY:
+		return ''
+	else:
+		return rhs
 
-def parse_grammar_file(filename):
-	# Open input grammar file for parsing
-	print "Opening {0}...".format(filename)
-	try:
-		infile = open(filename, 'r')
-	except IOError:
-		print "Error: {0} could not be found".format(filename)
-		sys.exit(-1)
-		
+			
+def parse_grammar_file(file):		
 	#find starting shape
 	while True:
-		firstline = infile.readline()
+		firstline = file.readline()
 		if firstline != "\n" and firstline[0:len(COMMENT)] != COMMENT:
 			break
 	
@@ -83,7 +121,7 @@ def parse_grammar_file(filename):
 			print "Error: start symbol {0} must be a nonterminal (i.e. capital letter)"
 			raise Exception
 		
-	rulelines = infile.readlines()
+	rulelines = file.readlines()
 	rulelines = filter(lambda r: r != "\n", rulelines)
 	rulelines = [r.strip() for r in rulelines]
 	
@@ -111,7 +149,7 @@ def parse_grammar_file(filename):
 			nonterminals.append(lhs)
 		
 		for symbol in rhs:
-			if not (symbol.isupper()) and not(symbol in terminals):
+			if not ((symbol == EMPTY) or (symbol.isupper()) or(symbol in terminals)):
 				terminals.append(symbol)
 				
 		r = Rule(lhs, rhs, int(weight))
@@ -129,22 +167,3 @@ def parse_grammar_file(filename):
 	return grammar
 	
 		
-def import_rules(filename):
-		# Open input grammar file for parsing
-		print "Opening {0}...".format(filename)
-		try:
-			infile = open(filename, 'r')
-		except IOError:
-			print "Error: {0} could not be found".format(filename)
-			sys.exit(-1)
-			
-		# Open output grammar file for writing
-		try:
-			outfilename = filename.replace(".txt", ".cfdg")
-			outfile = open(outfilename, 'w')
-		except IOError:
-			print "Error: {0} could not be opened for writing".format(outfilename)
-			sys.exit(-1)
-
-	
-	
