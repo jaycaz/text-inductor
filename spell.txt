@@ -4,7 +4,54 @@ start S
 
 S -> BPL
 
-B -> a
-B -> aa
-P -> b
-L -> c
+7: B -> XB
+7: B -> X|
+5: B -> YB
+5: B -> Y|
+
+10: P -> XP
+10: P -> X|
+3: P -> YP
+3: P -> Y|
+
+13: L -> XL
+13: L -> X|
+1: L -> YL
+1: L -> Y|
+
+E -> ~
+
+18: X -> CV
+X -> CC
+X -> ~
+
+18: Y -> VC
+Y -> VV
+Y -> ~
+
+11: V -> a
+9: V -> e
+6: V -> i
+13: V -> o
+6: V -> u
+
+1: C -> b
+7: C -> c
+5: C -> d
+1: C -> f
+1: C -> g
+1: C -> h
+1: C -> j
+1: C -> k
+1: C -> l
+6: C -> m
+4: C -> n
+5: C -> p
+1: C -> qu
+9: C -> r
+3: C -> s
+4: C -> t
+2: C -> v
+1: C -> w
+1: C -> x
+1: C -> z
