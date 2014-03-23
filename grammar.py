@@ -131,6 +131,8 @@ def parse_grammar_file(file):
 	
 	# parse rules for correct syntax and find all symbols
 	for line in rulelines:
+		if line.lstrip()[0] == COMMENT:
+			continue
 		lhs = getlhs(line)
 		rhs = getrhs(line)
 		weight = getweight(line)
@@ -152,7 +154,7 @@ def parse_grammar_file(file):
 			if not ((symbol == EMPTY) or (symbol.isupper()) or(symbol in terminals)):
 				terminals.append(symbol)
 				
-		r = Rule(lhs, rhs, int(weight))
+		r = Rule(lhs, rhs, float(weight))
 		rules.append(r)
 		
 	print "Nonterminals: {0}".format(nonterminals)
