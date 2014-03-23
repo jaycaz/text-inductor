@@ -1,33 +1,45 @@
 # Harry Potter spell grammar
 
-start S
+# Important principles:
+# 1: B,P,L cannot begin with a double consonant or double vowel
+# 2: B,P,L have their own appropriate prob. distribution for vowels, consonants, vowel groups, c groups, etc.
+#
+#
 
-S -> BPL
 
-7: B -> XB
-7: B -> X|
-5: B -> YB
-5: B -> Y|
+start W
 
-10: P -> XP
-10: P -> X|
-3: P -> YP
-3: P -> Y|
+W -> B|P|L
 
-13: L -> XL
-13: L -> X|
-1: L -> YL
-1: L -> Y|
+# B: Beginning syllables
+1: B -> XB
+1: B -> X
 
-E -> ~
+4: X -> VC
+2: X -> V
+4: X -> CV
+4: X -> CVC
+1: X -> CCV
 
-18: X -> CV
-X -> CC
-X -> ~
+# P: Penultimate syllable
+7: P -> CV
+5: P -> CVC
 
-18: Y -> VC
-Y -> VV
-Y -> ~
+# L: Last syllable
+5: L -> CV
+#2: L -> CVC
+#4: L -> CVV
+2: L -> CVs
+4: L -> Cio
+1: L -> CCV
+
+# X: consonant syllable
+#4: X -> CV
+#1: X -> CVV
+
+# Y: vowel syllable
+#4: Y -> VC
+#1: Y -> VCC
 
 11: V -> a
 9: V -> e
@@ -47,11 +59,11 @@ Y -> ~
 6: C -> m
 4: C -> n
 5: C -> p
-1: C -> qu
+#1: C -> qu
 9: C -> r
 3: C -> s
 4: C -> t
 2: C -> v
 1: C -> w
-1: C -> x
-1: C -> z
+#1: C -> x
+#1: C -> z
