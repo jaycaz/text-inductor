@@ -4,66 +4,102 @@
 # 1: B,P,L cannot begin with a double consonant or double vowel
 # 2: B,P,L have their own appropriate prob. distribution for vowels, consonants, vowel groups, c groups, etc.
 #
-#
 
+start S
 
-start W
-
-W -> B|P|L
+S -> B|P|L
 
 # B: Beginning syllables
-1: B -> XB
-1: B -> X
+2: B -> ZZ
+2: B -> Z
+1: B -> ~
 
-4: X -> VC
-2: X -> V
-4: X -> CV
-4: X -> CVC
-1: X -> CCV
+4: Z -> VC
+2: Z -> V
+4: Z -> CV
+4: Z -> CVC
+1: Z -> CCV
 
 # P: Penultimate syllable
-7: P -> CV
-5: P -> CVC
+7: P -> DW
+5: P -> DWD
 
 # L: Last syllable
-5: L -> CV
-#2: L -> CVC
-#4: L -> CVV
-2: L -> CVs
-4: L -> Cio
-1: L -> CCV
+5: L -> EX
+#2: L -> EXE
+#4: L -> EXX
+2: L -> EXs
+4: L -> Eio
+1: L -> EEX
 
-# X: consonant syllable
-#4: X -> CV
-#1: X -> CVV
+3: V -> a
+5: V -> e
+2: V -> i
+3: V -> o
+1: V -> u
 
-# Y: vowel syllable
-#4: Y -> VC
-#1: Y -> VCC
+4: W -> a
+5: W -> e
+1: W -> i
+3: W -> o
+5: W -> u
 
-11: V -> a
-9: V -> e
-6: V -> i
-13: V -> o
-6: V -> u
+6: X -> a
+1: X -> e
+5: X -> i
+9: X -> o
+2: X -> u
 
-1: C -> b
-7: C -> c
-5: C -> d
-1: C -> f
-1: C -> g
+0: C -> b
+3: C -> c
+0: C -> d
+0: C -> f
+0: C -> g
 1: C -> h
-1: C -> j
+0: C -> j
 1: C -> k
-1: C -> l
-6: C -> m
-4: C -> n
-5: C -> p
-#1: C -> qu
-9: C -> r
-3: C -> s
-4: C -> t
-2: C -> v
-1: C -> w
-#1: C -> x
-#1: C -> z
+0: C -> l
+2: C -> m
+1: C -> n
+1: C -> p
+3: C -> r
+1: C -> s
+1: C -> t
+1: C -> v
+0: C -> w
+
+0: D -> b
+3: D -> c
+2: D -> d
+1: D -> f
+1: D -> g
+0: D -> h
+0: D -> j
+0: D -> k
+1: D -> l
+2: D -> m
+2: D -> n
+3: D -> p
+1: D -> r
+1: D -> s
+1: D -> t
+0: D -> v
+0: D -> w
+
+0: E -> b
+1: E -> c
+3: E -> d
+0: E -> f
+0: E -> g
+0: E -> h
+0: E -> j
+0: E -> k
+0: E -> l
+2: E -> m
+1: E -> n
+1: E -> p
+5: E -> r
+1: E -> s
+2: E -> t
+1: E -> v
+0: E -> w

@@ -63,6 +63,7 @@ def generate_word(grammar, n = 1, seed = None):
 		# choose random nonterminal to expand
 		nonterms = get_nonterms(genstr)
 		numsteps = 0
+		#print "--------------------"
 		while len(nonterms) != 0 and numsteps < MAX_STEPS:
 			#print genstr
 			next_nonterm, next_pos = rand.choice(nonterms)
@@ -81,6 +82,7 @@ def generate_word(grammar, n = 1, seed = None):
 	
 		#print "Final string {0}: {1}".format(i, genstr)
 		print genstr
+		#print "--------------------"
 		
 		if numsteps == MAX_STEPS:
 			print "Error: generation exceeded maximum number of steps ({0})".format(MAX_STEPS)
