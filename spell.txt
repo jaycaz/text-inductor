@@ -7,29 +7,30 @@
 
 start S
 
-S -> B|P|L
+S -> BPL
 
 # B: Beginning syllables
-2: B -> ZZ
+2: B -> ZY
 2: B -> Z
 1: B -> ~
 
-4: Z -> VC
-2: Z -> V
+4: Y -> VC
+2: Y -> V
 4: Z -> CV
 4: Z -> CVC
-1: Z -> CCV
+#1: Z -> CCV
 
 # P: Penultimate syllable
 7: P -> DW
 5: P -> DWD
+2: P -> W
 
 # L: Last syllable
 5: L -> EX
 #2: L -> EXE
 #4: L -> EXX
 2: L -> EXs
-4: L -> Eio
+3: L -> Eio
 1: L -> EEX
 
 3: V -> a
