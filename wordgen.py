@@ -9,39 +9,52 @@ import sys
 import re
 import string
 import random as rand
+import types
 from grammar import Rule, Grammar, grammar_from_file
 
 MAX_STEPS = 200
 DEFAULT_NUM_WORDS = 10
 DEFAULT_SEED = None
 
-def get_nonterms(string):
-	nonterms = []
-	# returns list of 2-tuples (nonterminal value, position in string)
-	for pos, char in list(enumerate(string)):
-		if char.isupper():
-			nonterms.append((char, pos))
-			
-	return nonterms
 	
-# weighted random selection from list of nonterminal rules
-def choose_rule(rules, total_weight):
-	randnum = rand.randint(1, total_weight)
-	currtotal = 0
-	for rule in rules:
-		currtotal += rule.weight
-		if currtotal >= randnum:
-			return rule
-			
-	print "Error: choosing rule from list {0} with weight total {1} resulted in invalid choice".format(
-			rules, total_weight)
-	raise Exception
+def gen_words_file(grammarlist, outfilename, numwords = 1, seed = None):
+	if type(grammarlist) != types.ListType:
+		grammarlist = [grammarlist]
+	
+	# try to open file for writing
+	try:
+		outfile = open(outfilename, 'w')
+	except IOError as err:
+		print "Error: could not open '{0}' for writing".format(outfilename)
+		raise err
+	
+	wordmat = []
+	print wordmat
+	
+	# create words lists
+	for grammar in grammarlist:
+		wordmat.append(gen_words(grammar, numwords, seed))
+	
+	for i in range(len(grammarlist)):
+		outfile.write("Grammar {0}\t".format(i))
+	outfile.write("\n")
+	
+	for i in range(numwords):
+		for j in range(len(grammarlist)):
+			outfile.write("{0}\t".format(wordmat[j][i]))
+		outfile.write("\n")
+		
+	outfile.close()
+	
+	return wordmat
 	
 
-def generate_word(grammar, n = 1, seed = None):
+def gen_words(grammar, numwords = 1, seed = None):
 	if seed != None:
 		rand.seed(seed)
 
+	words = []
+		
 	# generate map of nonterminals to rules
 	rulemap = {}
 	for nonterm in grammar.nonterminals:
@@ -56,7 +69,7 @@ def generate_word(grammar, n = 1, seed = None):
 	for rule in grammar.rules:
 		weighttotals[rule.lhs] += rule.weight
 		
-	for i in range(n):
+	for i in range(numwords):
 		# begin forming generated string
 		genstr = grammar.start
 		
@@ -79,16 +92,40 @@ def generate_word(grammar, n = 1, seed = None):
 			
 			nonterms = get_nonterms(genstr)
 			numsteps += 1
-	
-		#print "Final string {0}: {1}".format(i, genstr)
-		print genstr
+		
+		words.append(genstr)
+		#print genstr
 		#print "--------------------"
 		
 		if numsteps == MAX_STEPS:
 			print "Error: generation exceeded maximum number of steps ({0})".format(MAX_STEPS)
 			raise Exception
+			
+	return words
 		
-
+def get_nonterms(string):
+	nonterms = []
+	# returns list of 2-tuples (nonterminal value, position in string)
+	for pos, char in list(enumerate(string)):
+		if char.isupper():
+			nonterms.append((char, pos))
+			
+	return nonterms
+	
+# weighted random selection from list of nonterminal rules
+def choose_rule(rules, total_weight):
+	randnum = rand.uniform(1, total_weight)
+	currtotal = 0
+	for rule in rules:
+		currtotal += rule.weight
+		if currtotal >= randnum:
+			return rule
+			
+	print "Error: choosing rule from list {0} with weight total {1} resulted in invalid choice".format(
+			rules, total_weight)
+	raise Exception
+	
+	
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
 		filename = raw_input("Enter a file name to convert: ")

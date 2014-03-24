@@ -52,17 +52,18 @@ class Grammar:
 		self.start = start
 	
 	def __repr__(self):
-		string = ""
+		string = "Grammar \n{\n"
 		string += "Nonterminals: {0}\n".format(self.nonterminals)
 		string += "Terminals: {0}\n".format(self.terminals)
 		string += "Start Symbol: {0}\n".format(self.start)
 		string += "Rules: [\n"
 		for rule in self.rules:
 			string += str(rule) + "\n"
-		string += "]\n"
+		string += "]\n}\n"
 		return string
 		
 
+# Creates a Grammar instance from a specification in a grammar file
 def grammar_from_file(filename):
 	# Open input grammar file for parsing
 	print "Opening {0}...".format(filename)
