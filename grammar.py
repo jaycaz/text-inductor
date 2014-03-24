@@ -26,18 +26,23 @@ DX = 1 + CHAR_SPACE
 COMMENT = "#"
 ARROW = "->"
 EMPTY = "~"
+WILDCARD = "*"
 SYMBOLNAME = "_5by5"
 LIBNAME = "i_pix.cfdg"
 TERM = "term"
 
+
 class Rule:
-	def __init__(self, lhs, rhs, weight):
+	def __init__(self, lhs, rhs, weight, fixed = True):
 		self.lhs = lhs
 		self.rhs = rhs
 		self.weight = weight
+		self.fixed = fixed
 		
 	def __repr__(self):
-		return "{0} : {1} {2} {3}".format(self.weight, self.lhs, ARROW, self.rhs)
+		fixedstr = "" if self.fixed else "*"
+		return "{0} {1} : {2} {3} {4}".format(
+			fixedstr, self.weight, self.lhs, ARROW, self.rhs)
 
 class Grammar:
 	def __init__(self, nonterminals, terminals, rules, start):
@@ -45,6 +50,17 @@ class Grammar:
 		self.terminals = terminals
 		self.rules = rules
 		self.start = start
+	
+	def __repr__(self):
+		string = ""
+		string += "Nonterminals: {0}\n".format(self.nonterminals)
+		string += "Terminals: {0}\n".format(self.terminals)
+		string += "Start Symbol: {0}\n".format(self.start)
+		string += "Rules: [\n"
+		for rule in self.rules:
+			string += str(rule) + "\n"
+		string += "]\n"
+		return string
 		
 
 def grammar_from_file(filename):
@@ -79,17 +95,21 @@ def term(symbol):
 # Splits
 def splitrule(rule):
 	ruleparts = re.findall(r"[^: ]+", rule)
-	ruleparts = filter(lambda a: a != ARROW, ruleparts)
+	ruleparts = filter(lambda a: a != ARROW and a != WILDCARD, ruleparts)
 	if len(ruleparts) == 2:
-			ruleparts.insert(0, 1)
+			ruleparts.insert(0, "1")
 	if len(ruleparts) != 3:		
 		print "Error: malformed rule {0}".format(rule)
 		raise Exception
 	return ruleparts
 	
+def getfixed(rule):
+	return rule.lstrip()[0: len(WILDCARD)] != WILDCARD
+	
 def getweight(rule):
 	ruleparts = splitrule(rule)
-	return ruleparts[0]
+	weight = ruleparts[0].replace(WILDCARD, "")
+	return weight
 	
 def getlhs(rule):
 	ruleparts = splitrule(rule)
@@ -135,13 +155,16 @@ def parse_grammar_file(file):
 			continue
 		lhs = getlhs(line)
 		rhs = getrhs(line)
-		weight = getweight(line)
+		weightstr = getweight(line)
+		fixed = getfixed(line)
 	
-		#print("({0} | {1} | {2})".format(rule.weight, rule.lhs, rule.rhs))
+		#print "({0} | {1} | {2})".format(rule.weight, rule.lhs, rule.rhs)
 		
-		if not str(weight).isdigit():
+		try:
+			weight = float(weightstr)
+		except ValueError as err:
 			print "Error: rule '{0}' has an invalid/NaN weight".format(line)
-			raise Exception
+			raise err
 		
 		if len(lhs) != 1:
 			print "Error: rule '{0}' has a malformed left-hand side".format(line)
@@ -154,16 +177,10 @@ def parse_grammar_file(file):
 			if not ((symbol == EMPTY) or (symbol.isupper()) or(symbol in terminals)):
 				terminals.append(symbol)
 				
-		r = Rule(lhs, rhs, float(weight))
+		r = Rule(lhs, rhs, weight, fixed)
 		rules.append(r)
 		
-	print "Nonterminals: {0}".format(nonterminals)
-	print "Terminals: {0}".format(terminals)
-	print "Start Symbol: {0}".format(startsymbol)
-	print "Rules: ["
-	for rule in rules:
-		print str(rule)
-	print "]"
+	#print grammar
 	
 	grammar = Grammar(nonterminals, terminals, rules, startsymbol)
 	return grammar
