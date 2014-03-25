@@ -16,7 +16,6 @@ MAX_STEPS = 200
 DEFAULT_NUM_WORDS = 10
 DEFAULT_SEED = None
 
-	
 def gen_words_file(grammarlist, outfilename, numwords = 1, seed = None):
 	if type(grammarlist) != types.ListType:
 		grammarlist = [grammarlist]
@@ -36,12 +35,12 @@ def gen_words_file(grammarlist, outfilename, numwords = 1, seed = None):
 		wordmat.append(gen_words(grammar, numwords, seed))
 	
 	for i in range(len(grammarlist)):
-		outfile.write("Grammar {0}\t".format(i))
+		outfile.write("Grammar {0},Score {0},".format(i))
 	outfile.write("\n")
 	
 	for i in range(numwords):
 		for j in range(len(grammarlist)):
-			outfile.write("{0}\t".format(wordmat[j][i]))
+			outfile.write("{0},,".format(wordmat[j][i]))
 		outfile.write("\n")
 		
 	outfile.close()
@@ -114,7 +113,8 @@ def get_nonterms(string):
 	
 # weighted random selection from list of nonterminal rules
 def choose_rule(rules, total_weight):
-	randnum = rand.uniform(1, total_weight)
+	randnum = rand.uniform(0, total_weight) - sys.float_info.epsilon
+	randnum = max(0, randnum)
 	currtotal = 0
 	for rule in rules:
 		currtotal += rule.weight

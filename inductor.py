@@ -28,6 +28,11 @@ START_STD_DEV = 2
 DEFAULT_ITERATIONS = 5
 RATE_MAX = 5
 
+
+def optimal_grammar(grammar_score_map):
+	maxitem = reduce(lambda a,b: a if a[1] > b[1] else b, grammar_score_map.items())
+	return maxitem[0]
+
 # simulated annealing adjustment
 # std dev should decrease to 0 when iteration == iterations
 def weight_std_dev(iteration = 1, iterations = DEFAULT_ITERATIONS):
@@ -40,11 +45,14 @@ def weight_std_dev(iteration = 1, iterations = DEFAULT_ITERATIONS):
 # lognormal distribution centered around <center>
 def gen_weight(center, iteration = 1, iterations = DEFAULT_ITERATIONS):
 	s = weight_std_dev(iteration, iterations)
-	r = rand.lognormvariate(math.log(center), s)
+	r = rand.lognormvariate(math.log(center), s) 
 	return min(r, MAX_WEIGHT) 
 
 # takes grammar and generates n iterations
-def gen_grammar_variants(grammar, n, iteration = 1, iterations = DEFAULT_ITERATIONS):
+def gen_grammar_variants(grammar, n, iteration = 1, iterations = DEFAULT_ITERATIONS, seed = None):
+	if seed != None:
+		rand.seed(seed)
+
 	variants = []
 	for i in range(n):	
 		newgrammar = copy.deepcopy(grammar)

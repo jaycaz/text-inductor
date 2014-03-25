@@ -14,24 +14,24 @@ S -> BPL
 2: B -> Z
 1: B -> ~
 
-4: Y -> VC
-2: Y -> V
-4: Z -> CV
-4: Z -> CVC
-#1: Z -> CCV
+*4: Y -> VC
+*2: Y -> V
+*4: Z -> CV
+*4: Z -> CVC
+*1: Z -> CCV
 
 # P: Penultimate syllable
-7: P -> DW
-5: P -> DWD
-2: P -> W
+*7: P -> DW
+*5: P -> DWD
+*2: P -> W
 
 # L: Last syllable
-5: L -> EX
+*5: L -> EX
 #2: L -> EXE
 #4: L -> EXX
-2: L -> EXs
-3: L -> Eio
-1: L -> EEX
+*2: L -> EXs
+*3: L -> Eio
+*1: L -> EEX
 
 3: V -> a
 5: V -> e
